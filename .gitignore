@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+dist/
+build/
+.DS_Store
+
+# Environment variables
+.env
+backend/.env
+
+# Local build outputs
+*.log
+backend/backend_logs.txt
+backend/boot_mongo.txt
+backend/boot_mongo3.txt
+backend/boot_log.txt
+backend/grants.txt
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Maven/Java residues
+target/
+.mvn/
+mvnw
+mvnw.cmd
+pom.xml.releaseBackup
+pom.xml.utilsBackup
+pom.xml.vbak
+release.properties
