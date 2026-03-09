@@ -561,6 +561,7 @@ tbody td:first-child { color: var(--text-primary); font-weight: 500; }
   margin: 12px 0 8px;
   background: linear-gradient(to right, #fff, #a5a6f6);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -617,4 +618,35 @@ tbody td:first-child { color: var(--text-primary); font-weight: 500; }
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.stealth-blur {
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.stealth-blur.active {
+  filter: blur(8px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.6;
+}
+
+/* Transaction Type Toggle */
+.toggle-btn {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.toggle-btn.active.expense {
+  background: var(--danger);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(248, 113, 113, 0.3);
+}
+
+.toggle-btn.active.income {
+  background: #34d399;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(52, 211, 153, 0.3);
+}
+
+
 

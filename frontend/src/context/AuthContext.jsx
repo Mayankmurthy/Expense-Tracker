@@ -7,7 +7,16 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
+  const [stealthMode, setStealthMode] = useState(() => localStorage.getItem('stealthMode') === 'true');
   const navigate = useNavigate();
+
+  const toggleStealthMode = () => {
+    setStealthMode(prev => {
+      const newVal = !prev;
+      localStorage.setItem('stealthMode', newVal);
+      return newVal;
+    });
+  };
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -34,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loginUser, logout, loading }}>
+    <AuthContext.Provider value={{ user, token, loginUser, logout, loading, stealthMode, toggleStealthMode }}>
       {!loading && children}
     </AuthContext.Provider>
   );

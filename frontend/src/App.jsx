@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react';
 import { Routes, Route, NavLink, useLocation, Navigate, Outlet } from 'react-router-dom';
-import { LayoutDashboard, List, LogOut, User as UserIcon } from 'lucide-react';
+import { LayoutDashboard, List, LogOut, User as UserIcon, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Dashboard from './pages/Dashboard';
 import Expenses from './pages/Expenses';
+import Subscriptions from './pages/Subscriptions';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import './index.css';
@@ -15,7 +16,7 @@ const ProtectedRoute = () => {
 };
 
 function Sidebar() {
-  const { user, logout } = useAuth();
+  const { user, logout, stealthMode, toggleStealthMode } = useAuth();
   const location = useLocation();
 
   return (
@@ -34,8 +35,18 @@ function Sidebar() {
       <NavLink to="/expenses" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
         <List size={18} className="nav-icon" /> All Expenses
       </NavLink>
+      <NavLink to="/subscriptions" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+        <ShieldCheck size={18} className="nav-icon" /> Subscriptions
+      </NavLink>
 
       <div style={{ marginTop: 'auto', paddingTop: '20px', borderTop: '1px solid var(--border)' }}>
+        <button onClick={toggleStealthMode} className="nav-link" style={{ marginBottom: '8px' }}>
+          {stealthMode ? (
+            <><EyeOff size={18} className="nav-icon" /> Show Amounts</>
+          ) : (
+            <><Eye size={18} className="nav-icon" /> Stealth Mode</>
+          )}
+        </button>
         <button onClick={logout} className="nav-link" style={{ color: 'var(--danger)' }}>
           <LogOut size={18} className="nav-icon" /> Logout
         </button>
@@ -64,6 +75,7 @@ function AppContent() {
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Dashboard showToast={showToast} />} />
             <Route path="/expenses" element={<Expenses showToast={showToast} />} />
+            <Route path="/subscriptions" element={<Subscriptions />} />
           </Route>
         </Routes>
       </main>

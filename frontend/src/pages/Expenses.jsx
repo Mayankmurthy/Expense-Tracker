@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Search, Edit2, Trash2 } from 'lucide-react';
+import { Search, Edit2, Trash2, RefreshCw } from 'lucide-react';
 import { getAllExpenses, deleteExpense } from '../services/api';
 import ExpenseForm from '../components/ExpenseForm';
+import { useAuth } from '../context/AuthContext';
+import { detectSubscriptions } from '../utils/finance';
 
 const CATEGORIES = ['All', 'Food', 'Transport', 'Entertainment', 'Health', 'Shopping', 'Bills', 'Other'];
 
@@ -21,6 +23,7 @@ export default function Expenses({ showToast }) {
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [editTarget, setEditTarget] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const { stealthMode } = useAuth();
 
   const loadExpenses = () => {
     getAllExpenses()
@@ -37,6 +40,9 @@ export default function Expenses({ showToast }) {
       return matchSearch && matchCat;
     });
   }, [expenses, search, categoryFilter]);
+
+  const subscriptions = useMemo(() => detectSubscriptions(expenses), [expenses]);
+  const subKeys = new Set(subscriptions.map(s => `${s.title.toLowerCase()}_${s.amount}`));
 
   const handleDelete = async (id) => {
     if (!confirm('Delete this expense?')) return;
@@ -99,14 +105,28 @@ export default function Expenses({ showToast }) {
                 const color = CATEGORY_COLORS[exp.category] || '#94a3b8';
                 return (
                   <tr key={exp.id}>
-                    <td>{exp.title}</td>
                     <td>
-                      <span className="badge" style={{ background: `${color}22`, color }}>
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <span>{exp.title}</span>
+                        {subKeys.has(`${exp.title.toLowerCase()}_${exp.amount}`) && (
+                          <span style={{ fontSize: '0.65rem', color: 'var(--accent)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '3px' }}>
+                            <RefreshCw size={10} /> RECURRING
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td>
+                      <span className="badge" style={{ background: `${color}22`, color, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                        <span>
+                          {exp.category === 'Food' ? '🍔' : exp.category === 'Transport' ? '🚗' : exp.category === 'Entertainment' ? '🎬' : exp.category === 'Health' ? '💊' : exp.category === 'Shopping' ? '🛍️' : exp.category === 'Bills' ? '📄' : '💼'}
+                        </span>
                         {exp.category}
                       </span>
                     </td>
                     <td>{exp.date}</td>
-                    <td className="amount-negative">₹{Number(exp.amount).toFixed(2)}</td>
+                    <td className={`${exp.type === 'income' ? 'amount-positive' : 'amount-negative'} ${stealthMode ? 'stealth-blur active' : ''}`} style={{ color: exp.type === 'income' ? '#34d399' : '#f87171' }}>
+                      {exp.type === 'income' ? '+' : '-'}₹{Number(exp.amount).toFixed(2)}
+                    </td>
                     <td>
                       <div style={{ display: 'flex', gap: '8px' }}>
                         <button className="btn-icon edit" title="Edit"
