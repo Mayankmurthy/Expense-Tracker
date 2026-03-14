@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
-import { TrendingUp, DollarSign, ShoppingCart, Calendar } from 'lucide-react';
+import { TrendingUp, DollarSign, ShoppingCart, Calendar, User as UserIcon } from 'lucide-react';
 import { getAllExpenses } from '../services/api';
 import ExpenseForm from '../components/ExpenseForm';
 import { useAuth } from '../context/AuthContext';
 import { detectSubscriptions } from '../utils/finance';
 
 const CATEGORY_COLORS = {
-  Food:          { bg: 'rgba(251,191,36,0.15)',  text: '#fbbf24' },
-  Transport:     { bg: 'rgba(96,165,250,0.15)',   text: '#60a5fa' },
-  Entertainment: { bg: 'rgba(167,139,250,0.15)',  text: '#a78bfa' },
-  Health:        { bg: 'rgba(52,211,153,0.15)',   text: '#34d399' },
-  Shopping:      { bg: 'rgba(249,115,22,0.15)',   text: '#fb923c' },
-  Bills:         { bg: 'rgba(248,113,113,0.15)',  text: '#f87171' },
-  Other:         { bg: 'rgba(148,163,184,0.15)',  text: '#94a3b8' },
+  Food: { bg: 'rgba(251,191,36,0.15)', text: '#fbbf24' },
+  Transport: { bg: 'rgba(96,165,250,0.15)', text: '#60a5fa' },
+  Entertainment: { bg: 'rgba(167,139,250,0.15)', text: '#a78bfa' },
+  Health: { bg: 'rgba(52,211,153,0.15)', text: '#34d399' },
+  Shopping: { bg: 'rgba(249,115,22,0.15)', text: '#fb923c' },
+  Bills: { bg: 'rgba(248,113,113,0.15)', text: '#f87171' },
+  Other: { bg: 'rgba(148,163,184,0.15)', text: '#94a3b8' },
 };
 
 export default function Dashboard({ showToast }) {
@@ -23,7 +23,7 @@ export default function Dashboard({ showToast }) {
   const loadExpenses = () => {
     getAllExpenses()
       .then(r => setExpenses(r.data))
-      .catch(() => {});
+      .catch(() => { });
   };
 
   useEffect(() => { loadExpenses(); }, []);
@@ -37,7 +37,7 @@ export default function Dashboard({ showToast }) {
     const now = new Date();
     return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
   });
-  
+
   const monthExpenses = thisMonth.filter(e => e.type !== 'income').reduce((s, e) => s + e.amount, 0);
   const monthIncome = thisMonth.filter(e => e.type === 'income').reduce((s, e) => s + e.amount, 0);
 

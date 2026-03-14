@@ -28,7 +28,7 @@ function Sidebar() {
           <span>{user ? `Hi, ${user.username}` : 'Expense Tracker'}</span>
         </div>
       </div>
-      
+
       <NavLink to="/" className={({ isActive }) => `nav-link${isActive && location.pathname === '/' ? ' active' : ''}`}>
         <LayoutDashboard size={18} className="nav-icon" /> Dashboard
       </NavLink>
@@ -71,7 +71,7 @@ function AppContent() {
         <Routes>
           <Route path="/login" element={<Login showToast={showToast} />} />
           <Route path="/register" element={<Register showToast={showToast} />} />
-          
+
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Dashboard showToast={showToast} />} />
             <Route path="/expenses" element={<Expenses showToast={showToast} />} />
@@ -79,7 +79,7 @@ function AppContent() {
           </Route>
         </Routes>
       </main>
-      
+
       {toast && (
         <div className="toast-container">
           <div className={`toast ${toast.type}`}>
